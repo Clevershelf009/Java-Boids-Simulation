@@ -1,7 +1,7 @@
 public class Vector2D {
 
-    private int x;
-    private int y;
+    private double x;
+    private double y;
 
     Vector2D(int x, int y) {
         this.x = x;
@@ -19,7 +19,7 @@ public class Vector2D {
     }
 
     public double getMagnitude() {
-        return Math.sqrt(x^2 + y^2);
+        return Math.sqrt(x * x + y * y);
     }
 
     public void normalise() {
@@ -28,11 +28,11 @@ public class Vector2D {
         y /= magnitude;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 }
