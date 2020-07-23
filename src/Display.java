@@ -1,19 +1,20 @@
-import java.awt.Canvas;
-import java.awt.Graphics;
-import javax.swing.JFrame;
+import javax.swing.*;
+import java.awt.*;
 
-class Display extends Canvas {
+class Display extends Canvas{
 
-    public static void main(String[] args){
-       JFrame frame = new JFrame("Boids Simulation");
-       Canvas canvas = new Display();
-       canvas.setSize(400, 400);
-       frame.add(canvas);
-       frame.pack();
-       frame.setVisible(true);
-    }
+    public Display(int width, int height, String title, Simulation simulation){
+        JFrame frame = new JFrame(title);
 
-    public void paint(Graphics g) {
-        g.fillOval(150, 100, 200, 200);
+        frame.setPreferredSize(new Dimension(width,height));
+        frame.setMaximumSize(new Dimension(width,height));
+        frame.setMinimumSize(new Dimension(width,height));
+
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.add(simulation);
+        frame.setVisible(true);
+        simulation.start();
     }
 }

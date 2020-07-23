@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Boid {
@@ -17,11 +18,23 @@ public class Boid {
         this.velocity = velocity;
     }
 
-    public void updateBoid(ArrayList<Boid> boids) {
-        coherenceRule(boids);
-        separationRule(boids);
-        alignmentRule(boids);
+    public void tick(ArrayList<Boid> boids) {
+        //coherenceRule(boids);
+        //separationRule(boids);
+        //alignmentRule(boids);
         position.add(velocity);
+
+        if(getPosition().getY() <= 0 || getPosition().getY() >= Simulation.HEIGHT - 64){
+            velocity.setY(velocity.getY() * -1);
+        }
+        if(getPosition().getX() <= 0 || getPosition().getX() >= Simulation.WIDTH - 48){
+            velocity.setX(velocity.getX() * -1);
+        }
+    }
+
+    public void render(Graphics g){
+        g.setColor(Color.BLACK);
+        g.fillRect((int) position.getX(),(int) position.getY(), 32, 32);
     }
 
     private void coherenceRule(ArrayList<Boid> boids) {
