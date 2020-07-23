@@ -4,7 +4,7 @@ import java.awt.image.BufferStrategy;
 public class Simulation extends Canvas implements Runnable {
 
     public static int WIDTH = 640, HEIGHT = WIDTH / 12 * 9;
-    public static Vector2D INITIALSPEED = new Vector2D(1,2);
+
 
     private Thread thread;
     private boolean running = false;
@@ -16,7 +16,8 @@ public class Simulation extends Canvas implements Runnable {
 
         new Display(WIDTH,HEIGHT,"Boids Simulation", this);
 
-        handler.addBoid(new Boid(new Vector2D(100,100), INITIALSPEED));
+        handler.addBoid(new Boid(new Vector2D(100,100)));
+        handler.addBoid(new Boid(new Vector2D(200,200)));
 
     }
 

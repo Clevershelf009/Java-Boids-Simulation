@@ -4,6 +4,8 @@ import java.util.ArrayList;
 public class Boid {
 
     private static final double SPEED_LIMIT = 0.1;
+    private Vector2D INITIALVELOCITY = new Vector2D(1,2);
+
     private final Double COHESION_FACTOR = 0.1;
     private final Double SEPARATION_FACTOR = 0.1;
     private final Double ALIGNMENT_FACTOR = 0.1;
@@ -14,15 +16,15 @@ public class Boid {
     private double socialDistancingThreshold = 2;
 
 
-    Boid(Vector2D position, Vector2D velocity) {
+    Boid(Vector2D position) {
         this.position = position;
-        this.velocity = velocity;
+        this.velocity = INITIALVELOCITY;
     }
 
     public void tick(ArrayList<Boid> boids) {
-        coherenceRule(boids);
-        separationRule(boids);
-        alignmentRule(boids);
+        //coherenceRule(boids);
+        //separationRule(boids);
+        //alignmentRule(boids);
         position.add(velocity);
 
         if(getPosition().getY() <= 0 || getPosition().getY() >= Simulation.HEIGHT - 64){
