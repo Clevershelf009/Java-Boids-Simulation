@@ -93,8 +93,11 @@ public class Boid {
     }
 
     private void mapSpeedToLimit() {
-        velocity.normalise();
-        velocity.multiply(SPEED_LIMIT);
+        double speed = velocity.getMagnitude();
+        if (speed > SPEED_LIMIT) {
+            velocity.divide(speed);
+            velocity.multiply(SPEED_LIMIT);
+        }
     }
 
     public Vector2D getPosition() {
