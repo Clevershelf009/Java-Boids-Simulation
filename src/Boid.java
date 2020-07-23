@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 public class Boid {
 
+    private static final double SPEED_LIMIT = 0.1;
     private final Double COHESION_FACTOR = 0.1;
     private final Double SEPARATION_FACTOR = 0.1;
     private final Double ALIGNMENT_FACTOR = 0.1;
@@ -19,9 +20,9 @@ public class Boid {
     }
 
     public void tick(ArrayList<Boid> boids) {
-        //coherenceRule(boids);
-        //separationRule(boids);
-        //alignmentRule(boids);
+        coherenceRule(boids);
+        separationRule(boids);
+        alignmentRule(boids);
         position.add(velocity);
 
         if(getPosition().getY() <= 0 || getPosition().getY() >= Simulation.HEIGHT - 64){
@@ -89,6 +90,11 @@ public class Boid {
         averageVelocity.subtract(position);
         averageVelocity.multiply(ALIGNMENT_FACTOR);
         velocity.add(averageVelocity);
+    }
+
+    private void mapSpeedToLimit() {
+        velocity.normalise();
+        velocity.multiply(SPEED_LIMIT);
     }
 
     public Vector2D getPosition() {
