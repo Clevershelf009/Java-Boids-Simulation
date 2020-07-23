@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class Boid {
 
     private static final double SPEED_LIMIT = 0.1;
-    private Vector2D INITIALVELOCITY = new Vector2D(1,2);
+    private Vector2D INITIALVELOCITY = new Vector2D(3,1);
 
     private final Double COHESION_FACTOR = 0.1;
     private final Double SEPARATION_FACTOR = 0.1;
@@ -22,22 +22,29 @@ public class Boid {
     }
 
     public void tick(ArrayList<Boid> boids) {
-        //coherenceRule(boids);
-        //separationRule(boids);
+        coherenceRule(boids);
+        separationRule(boids);
         //alignmentRule(boids);
         position.add(velocity);
 
-        if(getPosition().getY() <= 0 || getPosition().getY() >= Simulation.HEIGHT - 64){
+        if(getPosition().getY() <= 0 || getPosition().getY() >= Simulation.HEIGHT){
             velocity.setY(velocity.getY() * -1);
         }
-        if(getPosition().getX() <= 0 || getPosition().getX() >= Simulation.WIDTH - 48){
+        if(getPosition().getX() <= 0 || getPosition().getX() >= Simulation.WIDTH){
             velocity.setX(velocity.getX() * -1);
         }
     }
 
     public void render(Graphics g){
-        g.setColor(Color.BLACK);
-        g.fillRect((int) position.getX(),(int) position.getY(), 32, 32);
+        Graphics2D g2d = (Graphics2D) g.create();
+        int x = (int) position.getX();
+        int y = (int) position.getY();
+
+        g2d.setColor(Color.BLACK);
+
+        g2d.rotate(Math.atan2(velocity.getX(),-velocity.getY()), x, y);
+        g2d.fillPolygon(new int[] {x, x-10, x+10},new int[] {y, y+30, y+30},3);
+
     }
 
     private void coherenceRule(ArrayList<Boid> boids) {
