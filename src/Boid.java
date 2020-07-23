@@ -3,7 +3,9 @@ import java.util.ArrayList;
 
 public class Boid {
 
+
     private static final double SPEED_LIMIT = 15;
+
 
     private final Double COHESION_FACTOR = 0.005;
     private final Double SEPARATION_FACTOR = 0.5;
@@ -23,12 +25,14 @@ public class Boid {
     public void tick(ArrayList<Boid> boids) {
         coherenceRule(boids);
         separationRule(boids);
+
         alignmentRule(boids);
         mapSpeedToLimit();
         DirectAwayFromEdges();
 
         position.add(velocity);
     }
+
 
     private void DirectAwayFromEdges() {
         int edgeMargin = 100;
@@ -49,8 +53,14 @@ public class Boid {
     }
 
     public void render(Graphics g){
-        g.setColor(Color.BLACK);
-        g.fillRect((int) Math.round(position.getX()), (int) Math.round(position.getY()), 8, 8);
+        Graphics2D g2d = (Graphics2D) g.create();
+        int x = (int) position.getX();
+        int y = (int) position.getY();
+
+        g2d.setColor(Color.BLACK);
+
+        g2d.rotate(Math.atan2(velocity.getX(),-velocity.getY()), x, y);
+        g2d.fillPolygon(new int[] {x, x-10, x+10},new int[] {y, y+30, y+30},3);
     }
 
     private void coherenceRule(ArrayList<Boid> boids) {
