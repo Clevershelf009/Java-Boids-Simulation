@@ -1,9 +1,10 @@
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.Random;
 
 public class Simulation extends Canvas implements Runnable {
 
-    public static int WIDTH = 640, HEIGHT = WIDTH / 12 * 9;
+    public static int WIDTH = 1080, HEIGHT = 720;
 
 
     private Thread thread;
@@ -16,8 +17,10 @@ public class Simulation extends Canvas implements Runnable {
 
         new Display(WIDTH,HEIGHT,"Boids Simulation", this);
 
-        handler.addBoid(new Boid(new Vector2D(100,100)));
-        handler.addBoid(new Boid(new Vector2D(200,200)));
+        Random r = new Random();
+        for (int i = 0; i < 100; i++) {
+            handler.addBoid(new Boid(new Vector2D(r.nextInt(WIDTH), r.nextInt(HEIGHT)), new Vector2D(r.nextDouble() * 10, r.nextDouble() * 10)));
+        }
 
     }
 

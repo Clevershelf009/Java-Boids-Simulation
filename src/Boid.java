@@ -4,41 +4,53 @@ import java.util.ArrayList;
 public class Boid {
 
     private static final double SPEED_LIMIT = 15;
-    private Vector2D INITIALVELOCITY = new Vector2D(1,2);
 
-    private final Double COHESION_FACTOR = 0.1;
-    private final Double SEPARATION_FACTOR = 0.1;
-    private final Double ALIGNMENT_FACTOR = 0.1;
+    private final Double COHESION_FACTOR = 0.005;
+    private final Double SEPARATION_FACTOR = 0.5;
+    private final Double ALIGNMENT_FACTOR = 0.005;
 
     private Vector2D position;
     private Vector2D velocity;
-    private double proximityThreshold = 5;
-    private double socialDistancingThreshold = 2;
+    private double proximityThreshold = 50;
+    private double socialDistancingThreshold = 30;
 
 
-    Boid(Vector2D position) {
+    Boid(Vector2D position, Vector2D velocity) {
         this.position = position;
-        this.velocity = INITIALVELOCITY;
+        this.velocity = velocity;
     }
 
     public void tick(ArrayList<Boid> boids) {
-        //coherenceRule(boids);
-        //separationRule(boids);
+        coherenceRule(boids);
+        separationRule(boids);
         alignmentRule(boids);
         mapSpeedToLimit();
-        position.add(velocity);
+        DirectAwayFromEdges();
 
-        if(getPosition().getY() <= 0 || getPosition().getY() >= Simulation.HEIGHT - 64){
-            velocity.setY(velocity.getY() * -1);
+        position.add(velocity);
+    }
+
+    private void DirectAwayFromEdges() {
+        int edgeMargin = 100;
+        int turnFactor = 1;
+
+        if (position.getX() < edgeMargin) {
+            velocity.setX(velocity.getX() + turnFactor);
         }
-        if(getPosition().getX() <= 0 || getPosition().getX() >= Simulation.WIDTH - 48){
-            velocity.setX(velocity.getX() * -1);
+        if (position.getX() > Simulation.WIDTH - edgeMargin) {
+            velocity.setX(velocity.getX() - turnFactor);
+        }
+        if (position.getY() < edgeMargin) {
+            velocity.setY(velocity.getY() + turnFactor);
+        }
+        if (position.getY() > Simulation.HEIGHT - edgeMargin) {
+            velocity.setY(velocity.getY() - turnFactor);
         }
     }
 
     public void render(Graphics g){
         g.setColor(Color.BLACK);
-        g.fillRect((int) position.getX(),(int) position.getY(), 32, 32);
+        g.fillRect((int) Math.round(position.getX()), (int) Math.round(position.getY()), 8, 8);
     }
 
     private void coherenceRule(ArrayList<Boid> boids) {
@@ -46,7 +58,7 @@ public class Boid {
         int boidsWithinThreshold = 0;
 
         for (Boid boid : boids) {
-            if (position.distanceTo(boid.position) <= proximityThreshold) {
+            if (boid != this && position.distanceTo(boid.position) <= proximityThreshold) {
                 centreOfMass.add(boid.getPosition());
                 boidsWithinThreshold++;
             }
