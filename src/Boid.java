@@ -3,35 +3,52 @@ import java.util.ArrayList;
 
 public class Boid {
 
-    private static final double SPEED_LIMIT = 0.1;
-    private Vector2D INITIALVELOCITY = new Vector2D(3,1);
 
-    private final Double COHESION_FACTOR = 0.1;
-    private final Double SEPARATION_FACTOR = 0.1;
-    private final Double ALIGNMENT_FACTOR = 0.1;
+    private static final double SPEED_LIMIT = 15;
+
+
+    private final Double COHESION_FACTOR = 0.005;
+    private final Double SEPARATION_FACTOR = 0.5;
+    private final Double ALIGNMENT_FACTOR = 0.005;
 
     private Vector2D position;
     private Vector2D velocity;
-    private double proximityThreshold = 5;
-    private double socialDistancingThreshold = 2;
+    private double proximityThreshold = 50;
+    private double socialDistancingThreshold = 30;
 
 
-    Boid(Vector2D position) {
+    Boid(Vector2D position, Vector2D velocity) {
         this.position = position;
-        this.velocity = INITIALVELOCITY;
+        this.velocity = velocity;
     }
 
     public void tick(ArrayList<Boid> boids) {
         coherenceRule(boids);
         separationRule(boids);
-        //alignmentRule(boids);
-        position.add(velocity);
 
-        if(getPosition().getY() <= 0 || getPosition().getY() >= Simulation.HEIGHT){
-            velocity.setY(velocity.getY() * -1);
+        alignmentRule(boids);
+        mapSpeedToLimit();
+        DirectAwayFromEdges();
+
+        position.add(velocity);
+    }
+
+
+    private void DirectAwayFromEdges() {
+        int edgeMargin = 100;
+        int turnFactor = 1;
+
+        if (position.getX() < edgeMargin) {
+            velocity.setX(velocity.getX() + turnFactor);
         }
-        if(getPosition().getX() <= 0 || getPosition().getX() >= Simulation.WIDTH){
-            velocity.setX(velocity.getX() * -1);
+        if (position.getX() > Simulation.WIDTH - edgeMargin) {
+            velocity.setX(velocity.getX() - turnFactor);
+        }
+        if (position.getY() < edgeMargin) {
+            velocity.setY(velocity.getY() + turnFactor);
+        }
+        if (position.getY() > Simulation.HEIGHT - edgeMargin) {
+            velocity.setY(velocity.getY() - turnFactor);
         }
     }
 
@@ -44,7 +61,6 @@ public class Boid {
 
         g2d.rotate(Math.atan2(velocity.getX(),-velocity.getY()), x, y);
         g2d.fillPolygon(new int[] {x, x-10, x+10},new int[] {y, y+30, y+30},3);
-
     }
 
     private void coherenceRule(ArrayList<Boid> boids) {
@@ -52,7 +68,7 @@ public class Boid {
         int boidsWithinThreshold = 0;
 
         for (Boid boid : boids) {
-            if (position.distanceTo(boid.position) <= proximityThreshold) {
+            if (boid != this && position.distanceTo(boid.position) <= proximityThreshold) {
                 centreOfMass.add(boid.getPosition());
                 boidsWithinThreshold++;
             }
@@ -89,16 +105,17 @@ public class Boid {
         int boidsWithinThreshold = 0;
 
         for (Boid boid : boids) {
-            if (position.distanceTo(boid.position) <= proximityThreshold) {
+            if (boid.position != position && position.distanceTo(boid.position) <= proximityThreshold) {
                 averageVelocity.add(boid.getVelocity());
                 boidsWithinThreshold++;
             }
         }
-
-        averageVelocity.divide(boidsWithinThreshold);
-        averageVelocity.subtract(position);
-        averageVelocity.multiply(ALIGNMENT_FACTOR);
-        velocity.add(averageVelocity);
+        if (boidsWithinThreshold > 1) {
+            averageVelocity.divide(boidsWithinThreshold);
+            averageVelocity.subtract(position);
+            averageVelocity.multiply(ALIGNMENT_FACTOR);
+            velocity.add(averageVelocity);
+        }
     }
 
     private void mapSpeedToLimit() {
