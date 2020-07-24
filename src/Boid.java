@@ -17,11 +17,24 @@ public class Boid {
     private double socialDistancingThreshold = 30;
 
     private ArrayList<Vector2D> positionHistory = new ArrayList<>();
-    private int historyMaxLength = 50;
+    private int historyMaxLength = 20;
+
+    private Color[] fadingTrailColours = new Color[historyMaxLength];
 
     Boid(Vector2D position, Vector2D velocity) {
         this.position = position;
         this.velocity = velocity;
+
+        //pre-calculate colours for the fade in the trail
+        generateFadeColors();
+    }
+
+    private void generateFadeColors() {
+        for (int i = 0; i < historyMaxLength - 1; i++) {
+            int alphaValue = (int) mapFromOneRangeToAnother(i, 0, historyMaxLength - 1, 0, 255);
+            Color fade = new Color(0, 0, 0, alphaValue);
+            fadingTrailColours[i] = fade;
+        }
     }
 
     public void tick(ArrayList<Boid> boids) {
@@ -68,18 +81,27 @@ public class Boid {
         int x = (int) position.getX();
         int y = (int) position.getY();
 
-        g2d.setColor(Color.BLACK);
 
         for (int i = 0; i < positionHistory.size() - 1; i++) {
+
+
+            g2d.setColor(fadingTrailColours[i]);
+
             Vector2D lineStart = positionHistory.get(i);
             Vector2D lineEnd = positionHistory.get(i + 1);
 
             g2d.drawLine((int) lineStart.getX(), (int) lineStart.getY(), (int) lineEnd.getX(), (int) lineEnd.getY());
         }
+        g2d.setColor(Color.BLACK);
+
 
         g2d.rotate(Math.atan2(velocity.getX(),-velocity.getY()), x, y);
         g2d.fillPolygon(new int[] {x, x-10, x+10},new int[] {y, y+30, y+30},3);
 
+    }
+
+    private double mapFromOneRangeToAnother(double x, double inMin, double inMax, double outMin, double outMax) {
+        return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
     }
 
     private void coherenceRule(ArrayList<Boid> boids) {
