@@ -17,7 +17,7 @@ public class Boid {
     private double socialDistancingThreshold = 30;
 
     private ArrayList<Vector2D> positionHistory = new ArrayList<>();
-    private int historyMaxLength = 100;
+    private int historyMaxLength = 50;
 
     Boid(Vector2D position, Vector2D velocity) {
         this.position = position;
@@ -70,15 +70,16 @@ public class Boid {
 
         g2d.setColor(Color.BLACK);
 
-        g2d.rotate(Math.atan2(velocity.getX(),-velocity.getY()), x, y);
-        g2d.fillPolygon(new int[] {x, x-10, x+10},new int[] {y, y+30, y+30},3);
-
         for (int i = 0; i < positionHistory.size() - 1; i++) {
             Vector2D lineStart = positionHistory.get(i);
             Vector2D lineEnd = positionHistory.get(i + 1);
 
             g2d.drawLine((int) lineStart.getX(), (int) lineStart.getY(), (int) lineEnd.getX(), (int) lineEnd.getY());
         }
+
+        g2d.rotate(Math.atan2(velocity.getX(),-velocity.getY()), x, y);
+        g2d.fillPolygon(new int[] {x, x-10, x+10},new int[] {y, y+30, y+30},3);
+
     }
 
     private void coherenceRule(ArrayList<Boid> boids) {
