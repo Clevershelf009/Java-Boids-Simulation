@@ -16,6 +16,8 @@ public class Boid {
     private double proximityThreshold = 50;
     private double socialDistancingThreshold = 30;
 
+    private ArrayList<Vector2D> positionHistory = new ArrayList<>();
+    private int historyMaxLength = 100;
 
     Boid(Vector2D position, Vector2D velocity) {
         this.position = position;
@@ -25,18 +27,27 @@ public class Boid {
     public void tick(ArrayList<Boid> boids) {
         coherenceRule(boids);
         separationRule(boids);
-
         alignmentRule(boids);
         mapSpeedToLimit();
         DirectAwayFromEdges();
 
         position.add(velocity);
+        addPositionToHistory();
+    }
+
+    private void addPositionToHistory() {
+        Vector2D currentPosition = new Vector2D(position.getX(), position.getY());
+        positionHistory.add(currentPosition);
+
+        if (positionHistory.size() > historyMaxLength) {
+            positionHistory.remove(0);
+        }
     }
 
 
     private void DirectAwayFromEdges() {
         int edgeMargin = 100;
-        int turnFactor = 1;
+        double turnFactor = 1.5;
 
         if (position.getX() < edgeMargin) {
             velocity.setX(velocity.getX() + turnFactor);
@@ -61,6 +72,13 @@ public class Boid {
 
         g2d.rotate(Math.atan2(velocity.getX(),-velocity.getY()), x, y);
         g2d.fillPolygon(new int[] {x, x-10, x+10},new int[] {y, y+30, y+30},3);
+
+        for (int i = 0; i < positionHistory.size() - 1; i++) {
+            Vector2D lineStart = positionHistory.get(i);
+            Vector2D lineEnd = positionHistory.get(i + 1);
+
+            g2d.drawLine((int) lineStart.getX(), (int) lineStart.getY(), (int) lineEnd.getX(), (int) lineEnd.getY());
+        }
     }
 
     private void coherenceRule(ArrayList<Boid> boids) {
@@ -110,7 +128,7 @@ public class Boid {
                 boidsWithinThreshold++;
             }
         }
-        if (boidsWithinThreshold > 1) {
+        if (boidsWithinThreshold > 0) {
             averageVelocity.divide(boidsWithinThreshold);
             averageVelocity.subtract(position);
             averageVelocity.multiply(ALIGNMENT_FACTOR);
