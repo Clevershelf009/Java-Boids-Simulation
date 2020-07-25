@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Simulation extends Canvas implements Runnable {
 
-    public static int WIDTH = 1080, HEIGHT = 720;
+    public static int WIDTH = 1920, HEIGHT = 720;
 
 
     private Thread thread;
@@ -14,6 +14,7 @@ public class Simulation extends Canvas implements Runnable {
 
     public Simulation(){
         handler = new Handler();
+        handler.enableTrails();
 
         new Display(WIDTH,HEIGHT,"Boids Simulation", this);
 
