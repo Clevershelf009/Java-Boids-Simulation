@@ -1,7 +1,7 @@
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-public class Handler {
+public class BoidHandler {
 
     private ArrayList<Boid> boids = new ArrayList<>();
 

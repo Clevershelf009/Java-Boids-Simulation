@@ -10,17 +10,17 @@ public class Simulation extends Canvas implements Runnable {
     private Thread thread;
     private boolean running = false;
 
-    private Handler handler;
+    private BoidHandler boidHandler;
 
     public Simulation(){
-        handler = new Handler();
-        handler.enableTrails();
+        boidHandler = new BoidHandler();
+        boidHandler.enableTrails();
 
         new Display(WIDTH,HEIGHT,"Boids Simulation", this);
 
         Random r = new Random();
         for (int i = 0; i < 100; i++) {
-            handler.addBoid(new Boid(new Vector2D(r.nextInt(WIDTH), r.nextInt(HEIGHT)), new Vector2D(r.nextDouble() * 10, r.nextDouble() * 10)));
+            boidHandler.addBoid(new Boid(new Vector2D(r.nextInt(WIDTH), r.nextInt(HEIGHT)), new Vector2D(r.nextDouble() * 10, r.nextDouble() * 10)));
         }
 
     }
@@ -71,7 +71,7 @@ public class Simulation extends Canvas implements Runnable {
     }
 
     private void tick(){
-        handler.tick();
+        boidHandler.tick();
     }
 
     private void render(){
@@ -86,7 +86,7 @@ public class Simulation extends Canvas implements Runnable {
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(0,0,WIDTH,HEIGHT);
 
-        handler.render(g);
+        boidHandler.render(g);
 
         g.dispose();
         bs.show();
