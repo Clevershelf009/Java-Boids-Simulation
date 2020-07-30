@@ -3,23 +3,20 @@ import java.util.ArrayList;
 
 public class Boid {
 
+    private Vector2D position;
+    private Vector2D velocity;
 
     private static final double SPEED_LIMIT = 15;
-
 
     private final Double COHESION_FACTOR = 0.005;
     private final Double SEPARATION_FACTOR = 0.5;
     private final Double ALIGNMENT_FACTOR = 0.005;
 
-    private Vector2D position;
-    private Vector2D velocity;
     private double proximityThreshold = 50;
     private double socialDistancingThreshold = 30;
 
     public ArrayList<Vector2D> positionHistory = new ArrayList<>();
     public static int historyMaxLength = 20;
-
-    private Color[] fadingTrailColours = new Color[historyMaxLength];
 
     Boid(Vector2D position, Vector2D velocity) {
         this.position = position;
