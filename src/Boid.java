@@ -1,10 +1,7 @@
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Boid {
-
-    private Vector2D position;
-    private Vector2D velocity;
+public class Boid extends ArrowHead {
 
     private static final double SPEED_LIMIT = 15;
 
@@ -19,8 +16,16 @@ public class Boid {
     public static int historyMaxLength = 20;
 
     Boid(Vector2D position, Vector2D velocity) {
-        this.position = position;
-        this.velocity = velocity;
+        super(position, velocity);
+    }
+
+    private void addPositionToHistory() {
+        Vector2D currentPosition = new Vector2D(position.getX(), position.getY());
+        positionHistory.add(currentPosition);
+
+        if (positionHistory.size() > historyMaxLength) {
+            positionHistory.remove(0);
+        }
     }
 
     public void tick(ArrayList<Boid> boids) {
@@ -33,16 +38,6 @@ public class Boid {
         position.add(velocity);
         addPositionToHistory();
     }
-
-    private void addPositionToHistory() {
-        Vector2D currentPosition = new Vector2D(position.getX(), position.getY());
-        positionHistory.add(currentPosition);
-
-        if (positionHistory.size() > historyMaxLength) {
-            positionHistory.remove(0);
-        }
-    }
-
 
     private void DirectAwayFromEdges() {
         int edgeMargin = 100;
@@ -60,18 +55,6 @@ public class Boid {
         if (position.getY() > Simulation.HEIGHT - edgeMargin) {
             velocity.setY(velocity.getY() - turnFactor);
         }
-    }
-
-    public void render(Graphics g){
-        Graphics2D g2d = (Graphics2D) g.create();
-        int x = (int) position.getX();
-        int y = (int) position.getY();
-
-        g2d.setColor(Color.BLACK);
-
-        g2d.rotate(Math.atan2(velocity.getX(),-velocity.getY()), x, y);
-        g2d.fillPolygon(new int[] {x, x-10, x+10},new int[] {y, y+30, y+30},3);
-
     }
 
     private void coherenceRule(ArrayList<Boid> boids) {
@@ -137,11 +120,4 @@ public class Boid {
         }
     }
 
-    public Vector2D getPosition() {
-        return position;
-    }
-
-    public Vector2D getVelocity() {
-        return velocity;
-    }
 }
