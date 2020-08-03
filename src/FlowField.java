@@ -1,13 +1,14 @@
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class FlowField {
 
     private int screenWidth;
     private int screenHeight;
 
-    private final int HORIZONTAL_SEPARATION = 10;
-    private final int VERTICAL_SEPARATION = 10;
+    private final int HORIZONTAL_SEPARATION = 50;
+    private final int VERTICAL_SEPARATION = 50;
 
     private ArrayList<Boid> boids = new ArrayList<>();
 
@@ -22,7 +23,15 @@ public class FlowField {
         int boidsInAHorizontalLine = screenWidth / HORIZONTAL_SEPARATION;
         int boidsInAVerticalLine = screenHeight / VERTICAL_SEPARATION;
 
-        double[] flowFieldValues = PerlinNoise.PerlinNoise2D(boidsInAHorizontalLine, boidsInAVerticalLine, 5, 1);
+        /**Random r = new Random();
+
+        double[] flowFieldValues = new double[boidsInAHorizontalLine*boidsInAVerticalLine];
+        for (int i = 0; i < boidsInAHorizontalLine*boidsInAVerticalLine; i++) {
+            flowFieldValues[i] = r.nextDouble();
+        }**/
+        // above for testing
+
+        double[] flowFieldValues = PerlinNoise.PerlinNoise2D(boidsInAHorizontalLine, boidsInAVerticalLine, 1, 32);
 
         for (int row = 0; row < boidsInAVerticalLine; row++) {
             for (int col = 0; col < boidsInAHorizontalLine; col++) {
