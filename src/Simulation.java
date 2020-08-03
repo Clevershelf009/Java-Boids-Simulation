@@ -10,18 +10,25 @@ public class Simulation extends Canvas implements Runnable {
     private Thread thread;
     private boolean running = false;
 
+    private boolean displayFlowField = true;
+
     private BoidHandler boidHandler;
+    private FlowField flowField;
 
     public Simulation(){
-        boidHandler = new BoidHandler();
-        boidHandler.enableTrails();
 
+
+        boidHandler = new BoidHandler();
+//        boidHandler.enableTrails();
+//
+//
+//        Random r = new Random();
+//        for (int i = 0; i < 100; i++) {
+//            boidHandler.addBoid(new Boid(new Vector2D(r.nextInt(WIDTH), r.nextInt(HEIGHT)), new Vector2D(r.nextDouble() * 10, r.nextDouble() * 10)));
+//        }
         new Display(WIDTH,HEIGHT,"Boids Simulation", this);
 
-        Random r = new Random();
-        for (int i = 0; i < 100; i++) {
-            boidHandler.addBoid(new Boid(new Vector2D(r.nextInt(WIDTH), r.nextInt(HEIGHT)), new Vector2D(r.nextDouble() * 10, r.nextDouble() * 10)));
-        }
+        flowField = new FlowField(WIDTH, HEIGHT);
 
     }
 
@@ -87,6 +94,10 @@ public class Simulation extends Canvas implements Runnable {
         g.fillRect(0,0,WIDTH,HEIGHT);
 
         boidHandler.render(g);
+
+        if (displayFlowField) {
+            flowField.render(g);
+        }
 
         g.dispose();
         bs.show();
