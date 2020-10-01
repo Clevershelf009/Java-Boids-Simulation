@@ -26,7 +26,9 @@ public class Vector2D {
     }
 
     public void divide(double divider) {
-        //TODO: Throw error when divider == 0
+        if (divider == 0) {
+            throw new IllegalArgumentException("Cannot divide by zero");
+        }
         x /= divider;
         y /= divider;
 
