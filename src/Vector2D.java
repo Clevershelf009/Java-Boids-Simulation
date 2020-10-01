@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Vector2D {
 
     private double x;
@@ -62,5 +64,19 @@ public class Vector2D {
 
     public String toString() {
         return "x: " + x + " - y: " + y;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vector2D vector2D = (Vector2D) o;
+        return Double.compare(vector2D.getX(), getX()) == 0 &&
+                Double.compare(vector2D.getY(), getY()) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getX(), getY());
     }
 }
