@@ -17,7 +17,7 @@ public class ArrowHead {
         g2d.setColor(Color.BLACK);
 
         g2d.rotate(Math.atan2(velocity.getX(),-velocity.getY()), x, y);
-        g2d.fillPolygon(new int[] {x, x-10, x+10},new int[] {y, y+30, y+30},3);
+        g2d.fillPolygon(new int[] {x, x-10, x+10},new int[] {y-15, y+15, y+15},3);
 
     }
 
