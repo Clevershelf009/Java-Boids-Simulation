@@ -85,18 +85,32 @@ class Vector2DTest {
 
     @Test
     void setX() {
+        Vector2D vec = new Vector2D(2,2);
+        double expected = 1;
+        vec.setX(1);
+        assertEquals(expected, vec.getX(), "Vector2D setX isn't working properly");
     }
 
     @Test
     void setY() {
+        Vector2D vec = new Vector2D(2,2);
+        double expected = 1;
+        vec.setY(1);
+        assertEquals(expected, vec.getY(), "Vector2D setY isn't working properly");
     }
 
     @Test
     void getX() {
+        Vector2D vec = new Vector2D(1,2);
+        double expected = 1;
+        assertEquals(expected, vec.getX(), "Vector2D getX isn't working properly");
     }
 
     @Test
     void getY() {
+        Vector2D vec = new Vector2D(1,2);
+        double expected = 2;
+        assertEquals(expected, vec.getY(), "Vector2D getY isn't working properly");
     }
 
     @Test
