@@ -48,7 +48,7 @@ class Vector2DTest {
 
         vec.divide(divider);
 
-        assertEquals(vec, expected, "Vector2D divide method isn't working properly");
+        assertEquals(vec, expected, "Vector2D divide method isn't throwing the correct error when dividing by zero");
     }
 
     void divideByZero() {
@@ -71,6 +71,12 @@ class Vector2DTest {
 
     @Test
     void normalise() {
+        Vector2D vec = new Vector2D(6,8);
+        Vector2D expected = new Vector2D(0.6, 0.8);
+
+        vec.normalise();
+
+        assertEquals(vec, expected, "Vector2D normalise isn't working properly");
     }
 
     @Test
